@@ -1,2 +1,2 @@
-# 12306-ticket-accelerator
+# 12306-ticket-query
 12306快速查票工具
