@@ -87,3 +87,9 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# pycharm project files
+.idea/
+
+# generate pyc files
+*.pyc
