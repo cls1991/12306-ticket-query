@@ -1,5 +1,5 @@
 # 12306-ticket-query
-12306快速查票工具
+12306查票工具终端版
 
 ##1. 项目结构说明
 - core/
@@ -7,8 +7,10 @@
 	查询逻辑实现
 - data/
 
-	站点简称
+	站点简称, 车票信息
+- screenshot
 
+    效果图
 - util/
 
     工具集
@@ -43,9 +45,9 @@
       pip install -r requirements.txt                 // 安装依赖库
       python main.py                                  // 运行项目
 
-TODO:
-- 站点信息解析
-- 查询结果显示优化 
+###3. 效果图
+
+![ticket](https://github.com/cls1991/12306-ticket-query/raw/master/screenshot/ticket.png)
 
 ##3. 如何贡献
 - fork

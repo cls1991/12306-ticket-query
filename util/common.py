@@ -6,25 +6,9 @@
 
 import json
 import pycurl
-import re
-# import certifi
 from StringIO import StringIO
 
-
-def search_1(s_str, p_str):
-    """
-    search target string
-    :param s_str:
-    :param p_str"
-    :return:
-    """
-    if not s_str or not p_str:
-        return None
-    p = re.compile(p_str)
-    m = p.search(s_str)
-    if m:
-        return m.group()
-    return None
+from prettytable import PrettyTable
 
 
 def get_html(url, user_agent, refer_url):
@@ -40,7 +24,6 @@ def get_html(url, user_agent, refer_url):
     curl.setopt(pycurl.REFERER, refer_url)
 
     buffers = StringIO()
-    # curl.setopt(pycurl.CAINFO, certifi.where())
     curl.setopt(pycurl.SSL_VERIFYPEER, 0)
     curl.setopt(pycurl.URL, url)
     curl.setopt(pycurl.WRITEDATA, buffers)
@@ -81,8 +64,21 @@ def generate_station_name_pairs(use_local_file=True):
             f.close()
 
 
-def pp_json(jdata, sort=True, indents=4):
+def copy_dict_by_keys(s, t, keys):
     """
-    pretty print json data
+    copy dict k/v pairs from s to t
     """
-    print(json.dumps(jdata, sort_keys=sort, indent=indents))
+    for key in keys:
+        if key in s:
+            t.append(s[key])
+
+
+def pretty_print(header, data):
+    """
+    pretty print data
+    """
+    pt = PrettyTable()
+    pt._set_field_names(header)
+    for dt in data:
+        pt.add_row(dt)
+    print(pt)

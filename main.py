@@ -7,10 +7,15 @@ os.chdir(project)
 
 from core.query import query_tickets
 
+
+def main():
+    """
+    """
+    from_station = "北京"
+    to_station = "武汉"
+    train_date = "2017-04-07"
+    query_tickets(from_station, to_station, train_date)
+
+
 if __name__ == '__main__':
-    # 测试用例
-    if __name__ == '__main__':
-        from_station = "北京"
-        to_station = "武汉"
-        train_date = "2017-03-16"
-        query_tickets(from_station, to_station, train_date)
+    main()
