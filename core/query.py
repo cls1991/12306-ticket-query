@@ -35,9 +35,24 @@ def query_tickets(from_station, to_station, train_date):
     for d in data:
         dto = d["queryLeftNewDTO"]
         td = list()
+        dto["from_station_name"] = color_print(dto["from_station_name"], 'green')
+        dto["to_station_name"] = color_print(dto["to_station_name"], 'green')
+        dto["lishi"] = format_duration(dto["lishi"])
         copy_dict_by_keys(dto, td, (
             "station_train_code", "from_station_name", "to_station_name", "start_time", "arrive_time", "lishi",
             "zy_num", "ze_num", "rw_num", "yw_num", "rz_num", "yz_num", "wz_num"))
         rs.append(td)
     header = u"车次 出发站 到达站 出发时间 到达时间 历时 一等座 二等座 软卧 硬卧 软座 硬座 无座".split()
     pretty_print(header, rs)
+
+
+def format_duration(s):
+    """
+    format lishi
+    :param s:
+    :return:
+    """
+    l = s.replace(':', u'时') + u'分'
+    if l.startswith('00'):
+        return l[3:]
+    return l

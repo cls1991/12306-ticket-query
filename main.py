@@ -13,7 +13,7 @@ def main():
     """
     from_station = "北京"
     to_station = "武汉"
-    train_date = "2017-04-07"
+    train_date = "2017-04-08"
     query_tickets(from_station, to_station, train_date)
 
 
