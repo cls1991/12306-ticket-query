@@ -6,7 +6,12 @@
 
 import json
 import pycurl
-from StringIO import StringIO
+import sys
+
+if sys.version_info < (3, 0):
+    from StringIO import StringIO
+else:
+    from io import BytesIO as StringIO
 
 from prettytable import PrettyTable
 
@@ -29,6 +34,8 @@ def get_html(url, user_agent, refer_url):
     curl.setopt(pycurl.WRITEDATA, buffers)
     curl.perform()
     body = buffers.getvalue()
+    if sys.version_info > (3, 0):
+        body = body.decode("utf8")
     buffers.close()
     curl.close()
 
@@ -82,3 +89,15 @@ def pretty_print(header, data):
     for dt in data:
         pt.add_row(dt)
     print(pt)
+
+
+def str_decode(s):
+    """
+    decode str
+    :param s:
+    :return:
+    """
+    if sys.version_info < (3, 0):
+        return s.decode("utf8")
+    return s
+

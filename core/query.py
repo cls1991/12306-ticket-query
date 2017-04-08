@@ -17,9 +17,9 @@ def query_tickets(from_station, to_station, train_date):
     """
     station_names = json.load(open("data/station_name.json", "r"))
     if isinstance(from_station, str):
-        from_station = from_station.decode("utf8")
+        from_station = str_decode(from_station)
     if isinstance(to_station, str):
-        to_station = to_station.decode("utf8")
+        to_station = str_decode(to_station)
     from_station_short_cut = station_names[from_station]
     to_station_short_cut = station_names[to_station]
     search_url = const.TICKETS_JSON_URL % (train_date, from_station_short_cut, to_station_short_cut)
