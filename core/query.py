@@ -5,14 +5,14 @@
 """
 
 from util.common import *
-from share import const
 
 
-def query_tickets(from_station, to_station, train_date):
+def query_tickets(from_station, to_station, train_date, is_subscribe=False):
     """
     :param from_station:
     :param to_station:
     :param train_date:
+    :param is_subscribe:
     :return:
     """
     station_names = json.load(open("data/station_name.json", "r"))
@@ -43,7 +43,9 @@ def query_tickets(from_station, to_station, train_date):
             "zy_num", "ze_num", "rw_num", "yw_num", "rz_num", "yz_num", "wz_num"))
         rs.append(td)
     header = u"车次 出发站 到达站 出发时间 到达时间 历时 一等座 二等座 软卧 硬卧 软座 硬座 无座".split()
-    pretty_print(header, rs)
+    pt = pretty_print(header, rs)
+    if is_subscribe:
+        send_mail(pt)
 
 
 def format_duration(s):

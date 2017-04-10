@@ -21,3 +21,9 @@ USER_AGENT = 'Mozilla/5.0(iPad; U; CPU iPhone OS 3_2 like Mac OS X; en-us) Apple
 
 REFER_URL = 'https://kyfw.12306.cn'
 
+# SendCloud API
+SEND_CLOUD_API_URL = "http://www.sendcloud.net/webapi/mail.send_template.json"
+# SendCloud API_USER
+SEND_CLOUD_API_USER = "cls1991_test_BmQKl0"
+# SendCloud API_KEY
+SEND_CLOUD_API_KEY = "iwJnOYQZzEo3R6GS"

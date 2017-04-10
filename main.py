@@ -10,10 +10,11 @@ from core.query import query_tickets
 
 def main():
     """
+    test main
     """
     from_station = "北京"
     to_station = "武汉"
-    train_date = "2017-04-08"
+    train_date = "2017-04-10"
     query_tickets(from_station, to_station, train_date)
 
 

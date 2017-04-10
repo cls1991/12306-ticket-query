@@ -7,6 +7,9 @@
 import re
 import json
 import pycurl
+import time
+import datetime
+import requests
 import sys
 
 if sys.version_info < (3, 0):
@@ -16,7 +19,10 @@ else:
 
 from prettytable import PrettyTable
 
+from share import const
+
 headers = {}
+mail_conf = json.load(open("conf/mail.json", "r"))
 
 
 def header_function(header_line):
@@ -136,6 +142,7 @@ def pretty_print(header, data):
     for dt in data:
         pt.add_row(dt)
     print(pt)
+    return pt.get_string()
 
 
 def str_decode(s):
@@ -162,3 +169,67 @@ def color_print(s, color='green'):
         'none': '\033[0m'
     }
     return ''.join([ct[color], s, ct['none']])
+
+
+def time_now_str(format_str="%Y-%m-%d"):
+    """
+    获取当天时间
+    :param format_str:
+    :return:
+    """
+    return time.strftime(format_str, time.localtime())
+
+
+def datetime_to_str(dt, format_str="%Y-%m-%d"):
+    """
+    datetime转换字符串
+    :param format_str:
+    :param dt:
+    :return:
+    """
+    return dt.strftime(format_str)
+
+
+def send_mail(ticket_data):
+    """
+    发送邮件通知
+    :param ticket_data:
+    :return:
+    """
+    receivers = mail_conf["mail_to"].split(";")
+    request_date = datetime_to_str(datetime.datetime.now())
+    request_date_list = list()
+    match_data_list = list()
+    nickname_list = list()
+    for receiver in receivers:
+        request_date_list.append(request_date)
+        match_data_list.append(ticket_data)
+        nickname_list.append(receiver.split("@")[0])
+    # 发送邮件
+    sub_vars = {
+        'to': receivers,
+        'sub': {
+            "%nickname%": nickname_list,
+            "%ticket_data%": match_data_list,
+            "%send_date%": request_date_list
+        }
+    }
+    params = {
+        "api_user": const.SEND_CLOUD_API_USER,
+        "api_key": const.SEND_CLOUD_API_KEY,
+        "template_invoke_name": "ticket_query",
+        "substitution_vars": json.dumps(sub_vars),
+        "from": mail_conf["mail_from"],
+        "resp_email_id": "true",
+    }
+
+    r = requests.post(const.SEND_CLOUD_API_URL, data=params)
+    res = r.text
+    if sys.version_info < (3, 0):
+        res = res.encode("utf8")
+    response = json.loads(res)
+    if response['message'] == 'success':
+        return True
+    print('send_mail_fail:', r.text)
+    return False
+
