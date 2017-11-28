@@ -11,8 +11,8 @@ PASSAGER_TYPE_ENUM = {1:"ADULT", 2:"0X00"}
 # &leftTicketDTO.to_station=WHN&purpose_codes=ADULT
 ###
 
-TICKETS_JSON_URL = "https://kyfw.12306.cn/otn/leftTicket/query?leftTicketDTO.train_date=%s&leftTicketDTO.from_station=%s& \
-leftTicketDTO.to_station=%s&purpose_codes=ADULT"
+TICKETS_JSON_URL = "https://kyfw.12306.cn/otn/leftTicket/query?leftTicketDTO.train_date=%s&leftTicketDTO.from_station=%s&" \
+                   "leftTicketDTO.to_station=%s&purpose_codes=ADULT"
 
 STATION_NAME_JS_URL = "https://kyfw.12306.cn/otn/resources/js/framework/station_name.js?station_version=1.9001"
 
