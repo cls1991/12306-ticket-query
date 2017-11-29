@@ -23,29 +23,44 @@ def query_tickets(from_station, to_station, train_date, is_subscribe=False):
     from_station_short_cut = station_names[from_station]
     to_station_short_cut = station_names[to_station]
     search_url = const.TICKETS_JSON_URL % (train_date, from_station_short_cut, to_station_short_cut)
-    content = json.loads(get_html(search_url, const.USER_AGENT, const.REFER_URL))
-    if not content["status"]:  # query error, return
-        print("query param error")
-        return
-    if "data" not in content:
-        print("no ticket left")
-        return
-    data = content["data"]
-    rs = list()
-    for d in data:
-        dto = d["queryLeftNewDTO"]
-        td = list()
-        dto["from_station_name"] = color_print(dto["from_station_name"], 'green')
-        dto["to_station_name"] = color_print(dto["to_station_name"], 'green')
-        dto["lishi"] = format_duration(dto["lishi"])
-        copy_dict_by_keys(dto, td, (
-            "station_train_code", "from_station_name", "to_station_name", "start_time", "arrive_time", "lishi",
-            "zy_num", "ze_num", "rw_num", "yw_num", "rz_num", "yz_num", "wz_num"))
-        rs.append(td)
-    header = u"车次 出发站 到达站 出发时间 到达时间 历时 一等座 二等座 软卧 硬卧 软座 硬座 无座".split()
-    pt = pretty_print(header, rs)
-    if is_subscribe:
-        send_mail(pt)
+    try:
+        content = json.loads(get_html(search_url, const.USER_AGENT, const.REFER_URL))
+        if not content["status"]:  # query error, return
+            print("query param error")
+            return
+        if "data" not in content:
+            print("no ticket left")
+            return
+        data = content["data"]['result']
+        station_names_reverse = dict(zip(station_names.values(), station_names.keys()))
+        rs = list()
+        for d in data:
+            t = d.split('|')
+            td = [
+                t[3],
+                station_names_reverse.get(t[4], t[4]),
+                station_names_reverse.get(t[7], t[7]),
+                t[8],
+                t[9],
+                format_duration(t[10]),
+                t[30],
+                t[22],
+                t[33],
+                t[28],
+                t[24],
+                t[29],
+                t[26],
+            ]
+            for i, m in enumerate(td):
+                if not m:
+                    td[i] = '--'
+            rs.append(td)
+        header = u"车次 出发站 到达站 出发时间 到达时间 历时 一等座 二等座 软卧 硬卧 软座 硬座 无座".split()
+        pt = pretty_print(header, rs)
+        if is_subscribe:
+            send_mail(pt)
+    except ValueError:
+        print('json decode error')
 
 
 def format_duration(s):

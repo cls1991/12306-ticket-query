@@ -9,8 +9,9 @@ import json
 import pycurl
 import time
 import datetime
-import requests
 import sys
+
+import requests
 
 if sys.version_info < (3, 0):
     from StringIO import StringIO as BytesIO
@@ -102,26 +103,18 @@ def generate_station_name_pairs(use_local_file=True):
     :return:
     """
     if use_local_file:
-        f = open("data/station_name.js", "rb")
         sl = list()
-        for line in f:
-            sl.append(line)
-        f.close()
+        with open("data/station_name.js", "rb") as f:
+            for line in f:
+                sl.append(line)
         rs = dict()
         sd = ''.join(sl)
-        st = sd.split("'")[1]
-        for s0 in st.split("@"):
-            if s0 == "":
-                continue
-            s1 = s0.split("|")
-            if not s1:
-                continue
-            for s2 in s1:
-                rs[s2] = s1[2]
+        res = re.findall(u'([\u4e00-\u95fa5]+)\|([A-Z]+)', sd.decode('utf8'))
+        for r in res:
+            rs[r[0]] = r[1]
         if rs:
-            f = open("data/station_name.json", "wb")
-            f.write(json.dumps(rs))
-            f.close()
+            with open("data/station_name.json", "wb") as f:
+                f.write(json.dumps(rs, indent=4))
 
 
 def copy_dict_by_keys(s, t, keys):
@@ -232,4 +225,3 @@ def send_mail(ticket_data):
         return True
     print('send_mail_fail:', r.text)
     return False
-
