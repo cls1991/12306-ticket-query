@@ -103,18 +103,15 @@ def generate_station_name_pairs(use_local_file=True):
     :return:
     """
     if use_local_file:
-        sl = list()
         with open("data/station_name.js", "rb") as f:
-            for line in f:
-                sl.append(line)
+            sd = f.read().decode('utf8').replace('\n', '')
         rs = dict()
-        sd = ''.join(sl)
-        res = re.findall(u'([\u4e00-\u95fa5]+)\|([A-Z]+)', sd.decode('utf8'))
+        res = re.findall(u'([\u4e00-\u9fa5]+)\|([A-Z]+)', sd)
         for r in res:
             rs[r[0]] = r[1]
         if rs:
             with open("data/station_name.json", "wb") as f:
-                f.write(json.dumps(rs, indent=4))
+                f.write(json.dumps(rs, indent=4).encode())
 
 
 def copy_dict_by_keys(s, t, keys):
