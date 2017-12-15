@@ -93,3 +93,6 @@ ENV/
 
 # generate pyc files
 *.pyc
+
+# macos
+.DS_Store
